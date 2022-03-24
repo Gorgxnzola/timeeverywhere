@@ -27,7 +27,7 @@ async def t(ctx, * , i):
     soup = BeautifulSoup(html, 'html.parser')
     time, place = soup.find(id="clock"), soup.find(id="msgdiv")
     ampm = time.find('span')
-    await ctx.send("**"+soup.find(id="clock").contents[0][:-3]+" "+ampm.contents[0].lower()+"** - "+place.find('span').contents[0])
+    await ctx.send(f"**{soup.find(id="clock").contents[0][:-3]} {ampm.contents[0].lower()}** - {place.find('span').contents[0]}")
 
 @bot.command(name="help")
 async def helpDef(ctx):
