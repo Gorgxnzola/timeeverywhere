@@ -1,4 +1,3 @@
 # Time Everywhere
-Source code of the Time Everywhere discord bot
-
-feel free to use this code
+Use this Bot to lookup the time on any place on earth! 
+Thanks to https://time.is
