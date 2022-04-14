@@ -1,9 +1,8 @@
 import os
-from urllib.error import HTTPError
 from dotenv import load_dotenv
 import discord
 from discord.ext import commands
-from urllib.request import urlopen, Request
+import requests
 from bs4 import BeautifulSoup
 load_dotenv()
 
@@ -14,20 +13,14 @@ case_insensitive = True
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Game('<help'))
-    print(f"{bot.user} is online! Servers in: {len(bot.guilds)}")
-
 
 @bot.command()
-async def t(ctx, * , i):
-    url = "https://time.is/?q=" + "+".join(i.split())
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req)
-    html = webpage.read()
-    webpage.close()
-    soup = BeautifulSoup(html, 'html.parser')
-    time, place = soup.find(id="clock"), soup.find(id="msgdiv")
-    ampm = time.find('span')
-    await ctx.send(f"**{soup.find(id="clock").contents[0][:-3]} {ampm.contents[0].lower()}** - {place.find('span').contents[0]}")
+async def t(ctx, *, args):
+  soup = BeautifulSoup(requests.get("https://time.is/?q=" + "+".join(args.split()),
+                       headers={'User-Agent': 'Mozilla/5.0'}).text, 'html.parser')
+  time, where = soup.find(id="clock"), soup.find(id="msgdiv")
+  here, ampm = where.find('span'), time.find('span')
+  await ctx.send(f"**{time.contents[0][:-3]} {ampm.contents[0].lower()}** - {here.contents[0]}")
 
 @bot.command(name="help")
 async def helpDef(ctx):
